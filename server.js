@@ -1,4 +1,5 @@
 var express = require("express");
+var exphbs = require("express-handlebars")
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
@@ -6,12 +7,18 @@ var axios = require("axios");
 var cheerio = require("cheerio");
 var request = require("request")
 var db = require("./models");
-
+var index = require("./routes/index")
 var PORT = 3000;
 
 // Initialize Express
 var app = express();
 
+
+
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
+
+app.use("/", index);
 // Configure middleware
 
 // Use morgan logger for logging requests
