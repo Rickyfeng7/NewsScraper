@@ -14,6 +14,10 @@ var HeadlineSchema = new Schema({
 	url: {
 		type: String,
 		require: true
+	},
+	saved:{
+		type: Boolean,
+		default: false
 	}
 })
 
