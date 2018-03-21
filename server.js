@@ -6,7 +6,7 @@ var mongoose = require("mongoose");
 var axios = require("axios");
 var cheerio = require("cheerio");
 var request = require("request");
-var db = require("./models");
+var models = require("./models");
 var index = require("./routes/index");
 
 var PORT = 3000;
@@ -32,9 +32,9 @@ app.use(express.static("public"));
 // Connect to the Mongo DB
 
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/HomeworkNewsScraper", {
+mongoose.connect("mongodb://localhost/HomeworkNewsScraper");
   // useMongoClient: true
-});
+
 
 app.listen(PORT, function() {
   console.log("App running on port " + PORT + "!");

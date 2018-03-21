@@ -10,7 +10,7 @@ app.get('/', function(req, res, next) {
 });
 // home page = /
 app.get("/", function(req, res){
-	db.Headline
+	db.article
 	.find({}, function(err, data) {
 		if (err){
 			console.log(error)
@@ -48,10 +48,10 @@ app.get("/scrape", function(req, res) {
 		        .children("a")
 		        .attr("href");
 		    console.log("first result", result)
-	    	db.Headline
+	    	db.article
 			.create(result)
-			.then(function(dbHeadline){
-    			console.log("58", dbHeadline)
+			.then(function(dbarticle){
+    			console.log("58", dbarticle)
     			res.send("Scrape Complete")
     		})
     		.catch(function(err){
@@ -65,11 +65,11 @@ app.get("/scrape", function(req, res) {
 // Route for getting all Articles from the db
 app.get("/articles", function(req, res) {
   	// Grab every document in the Articles collection
-  	db.Headline
+  	db.article
     .find({})
-    .then(function(dbHeadline) {
+    .then(function(dbarticle) {
       	// If we were able to successfully find Articles, 	send them back to the client
-      	res.json(dbHeadline);
+      	res.json(dbarticle);
     })
     .catch(function(err) {
       	// If an error occurred, send it to the client
@@ -78,32 +78,37 @@ app.get("/articles", function(req, res) {
 });
 
 //Saving Favorites Articles
-app.post("/articles/save/:id", function(req, res){
-	headline.findOneAndUpdate({"_id": req.params.id}, {"saved": true})
-	.then(function(err, data){
-		if (err) {
-			console.log(err);
-		}
-		else{
-			res.send(data);
-		}
-	});
+app.post("/savedArticles", function(req, res){
+	console.log("hi from line 82 inside post")
+	var getId = req.body;
+	console.log("this is the req", getId)
+	var favoriteArticle = {};
+	// db.article
+	// .findOneAndUpdate({_id: getId}, {"saved": true})
+	// .then(function(err, data){
+	// 	if (err) {
+	// 		console.log(err);
+	// 	}
+	// 	else{
+	// 		res.send(data);
+	// 	}
+	// });
 });
-//getting at the saved headlines
+//getting at the saved articles
 app.get("/saved", function(req,res){
-	db.headline
+	db.article
 	.find({saved: true}).sort({createdAt: -1})
-	.then(function(dbheadlines){
-		console.log(dbheadlines);
+	.then(function(dbarticles){
+		console.log(dbarticles);
 		var saveObj = {
-			savedheadline: dbheadlines
+			savedarticle: dbarticle
 		}
 		res.render("saved", saveObj)
 	})
 })
 // get the notes to a specific id
-app.get("/headlines/:id/notes", function(req,res){
-	db.headline
+app.get("/articles/:id/notes", function(req,res){
+	db.article
 	.findOne({_id:req.params.id})
 	.populate("note")
 	.then(function(result){
@@ -116,7 +121,7 @@ app.post("/create/note", function(req, res){
 	db.note
 	.create({body:req.body})
 	.then(function(dbNote){
-		db.headlines
+		db.article
 		.findOneAndUpdate({_id:req.body.articleId}, {$push:{ note:dbNote._id}})
 		.then(function(res){
 			console.log(res)

@@ -10,7 +10,11 @@ $(document).on("click", "#scrape", function(event) {
         // For each one
         for (var i = 0; i < data.length; i++) {
         // Display the apropos information on the page
-      $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].headline + "<br />" + data[i].url + "<br />" + data[i].summary + "</p>" + "<br />" + "<button id='save' data-id='" + data[i]._id + "'>" + "save article" + "</button>" );
+      $("#articles").append("<p data-id='" + data[i]._id + "'>" 
+        + data[i].headline + "<br />" 
+        + data[i].url + "<br />" 
+        + data[i].summary + "</p>" + "<br />" 
+        + "<button id='save' data-id='" + data[i]._id + "'>" + "save article" + "</button>" );
         };
     });
   })
@@ -18,4 +22,13 @@ $(document).on("click", "#scrape", function(event) {
 
 $(document).on("click", "#save", function(event) {
   console.log("hello", event);
+  var savedId = $(this).attr("data-id");
+  console.log(savedId);
+    $.ajax({
+        method: "POST",
+        url: "/savedArticles",
+        data: {
+        id: savedId
+        }
+    });
 });
