@@ -13,7 +13,7 @@ app.get("/", function(req, res){
 	db.article
 	.find({}, function(err, data) {
 		if (err){
-			console.log(error)
+			// console.log(error)
 		}
 		else{
 			var articlesobj = {
@@ -54,10 +54,10 @@ app.get("/scrape", function(req, res) {
     			console.log("58", dbarticle)
     			res.send("Scrape Complete")
     		})
-    		.catch(function(err){
-    			console.log(err)
-    			res.json(err)
-    		})
+    		// .catch(function(err){
+    		// 	console.log(err)
+    		// 	res.json(err)
+    		// })
 		})
     })
 });
@@ -71,37 +71,38 @@ app.get("/articles", function(req, res) {
       	// If we were able to successfully find Articles, 	send them back to the client
       	res.json(dbarticle);
     })
-    .catch(function(err) {
-      	// If an error occurred, send it to the client
-      	res.json(err);
-    });
+    // .catch(function(err) {
+    //   	// If an error occurred, send it to the client
+    //   	res.json(err);
+    // });
 });
 
 //Saving Favorites Articles
-app.post("/savedArticles", function(req, res){
+app.post("/savedArticles/:id", function(req, res){
 	console.log("hi from line 82 inside post")
-	var getId = req.body;
-	console.log("this is the req", getId)
+	var getId = req.params.id;
+	console.log("this is the res", getId)
 	var favoriteArticle = {};
-	// db.article
-	// .findOneAndUpdate({_id: getId}, {"saved": true})
-	// .then(function(err, data){
-	// 	if (err) {
-	// 		console.log(err);
-	// 	}
-	// 	else{
-	// 		res.send(data);
-	// 	}
-	// });
+	db.article
+	.findOneAndUpdate({_id: getId}, {"saved": true})
+	.then(function(err, data){
+		if (err) {
+			console.log("90", err);
+		}
+		else{
+			console.log(data)
+			res.send(data);
+		}
+	});
 });
 //getting at the saved articles
 app.get("/saved", function(req,res){
 	db.article
 	.find({saved: true}).sort({createdAt: -1})
-	.then(function(dbarticles){
-		console.log(dbarticles);
+	.then(function(dbarticle){
+		console.log(dbarticle);
 		var saveObj = {
-			savedarticle: dbarticle
+			savedarticle: dbarticles
 		}
 		res.render("saved", saveObj)
 	})
@@ -126,8 +127,8 @@ app.post("/create/note", function(req, res){
 		.then(function(res){
 			console.log(res)
 			res.json(dbNote)
-		}).catc(function(err){
-			console.log(err)
+		// }).catch(function(err){
+		// 	console.log(err)
 		})
 	})
 })

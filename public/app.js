@@ -26,9 +26,14 @@ $(document).on("click", "#save", function(event) {
   console.log(savedId);
     $.ajax({
         method: "POST",
-        url: "/savedArticles",
-        data: {
-        id: savedId
-        }
+        url: "/savedArticles/" + savedId
+    });
+});
+
+$(document).on("click", "#favorites", function(event) {
+  console.log("hello from line 34", event);
+    $.ajax({
+        method: "get",
+        url: "/saved"
     });
 });
